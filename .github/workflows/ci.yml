@@ -1,35 +1,41 @@
-name: AI-Ops Agent Continuous Integration
+name: AI Agent CI Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ main ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ main ]
 
 jobs:
   test-agent:
     runs-on: ubuntu-latest
-    # This automatically sets the base directory for every 'run' command
-    defaults:
-      run:
-        working-directory: ./backend
+    
+    # Use your Secrets and Variables here
+    env:
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      LANGSMITH_API_KEY: ${{ secrets.LANGSMITH_API_KEY }}
+      LANGSMITH_PROJECT: ${{ vars.LANGSMITH_PROJECT }}
+      LANGSMITH_ENDPOINT: ${{ vars.LANGSMITH_ENDPOINT }}
+      LANGCHAIN_TRACING_V2: "true"
+      MAX_RETRIES: ${{ vars.MAX_RETRIES }}
+      AUTO_FIX_ENABLED: ${{ vars.AUTO_FIX_ENABLED }}
+      MIN_CONFIDENCE: ${{ vars.MIN_CONFIDENCE }}
 
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.12"
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-    - name: Install and Run
-      env:
-        GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-        AUTO_FIX_ENABLED: "false"
-        PYTHONPATH: ${{ github.workspace }}/backend
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        python -m app.test_agent
-        
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Tests
+        run: |
+          # Replace this with the command that triggers your agent tests
+          python -m app.test_agent
