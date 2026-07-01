@@ -1,18 +1,34 @@
-name: CI Pipeline
+name: AI Agent CI Pipeline
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
-  build:
+  test-agent:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      PYTHONPATH: .
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      LANGSMITH_API_KEY: ${{ secrets.LANGSMITH_API_KEY }}
+      # Add other required variables here
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Verify files
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
         run: |
-          echo "Listing files to verify structure:"
-          ls -R
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Tests
+        run: |
+          python -m app.test_agent
