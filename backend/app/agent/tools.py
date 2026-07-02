@@ -5,7 +5,11 @@ from langchain_groq import ChatGroq
 from langchain_core.tools import StructuredTool
 
 # ── LLM Core Instance ───────────────────────────────────────────
-api_key = "gsk_YOUR_ACTUAL_LONG_KEY_HERE"
+api_key = os.getenv("GROQ_API_KEY")
+
+# If the key is missing, this will raise a clear error rather than '***'
+if not api_key:
+    raise ValueError("GROQ_API_KEY is not set in the environment variables.")
 
 llm = ChatGroq(
     model="llama-3.3-70b-versatile", 
