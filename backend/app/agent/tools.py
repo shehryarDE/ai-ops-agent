@@ -5,7 +5,12 @@ from langchain_groq import ChatGroq
 from langchain_core.tools import StructuredTool
 
 # ── LLM Core Instance ───────────────────────────────────────────
-llm = ChatGroq(model="llama-3.3-70b-versatile", api_key=os.getenv("GROQ_API_KEY"))
+api_key = "gsk_YOUR_ACTUAL_LONG_KEY_HERE"
+
+llm = ChatGroq(
+    model="llama-3.3-70b-versatile", 
+    api_key=api_key
+)
 
 # ── Function Blueprints ─────────────────────────────────────────
 
