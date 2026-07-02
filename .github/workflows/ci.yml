@@ -14,10 +14,8 @@ jobs:
       PYTHONPATH: .
       GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
       LANGSMITH_API_KEY: ${{ secrets.LANGSMITH_API_KEY }}
-      LANGSMITH_PROJECT: ${{ vars.LANGSMITH_PROJECT }}
-      LANGSMITH_ENDPOINT: ${{ vars.LANGSMITH_ENDPOINT }}
-      LANGCHAIN_TRACING_V2: "true"
-
+      # Explicitly override if needed
+      GROQ_API_KEY_OVERRIDE: ${{ secrets.GROQ_API_KEY }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
